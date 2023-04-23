@@ -30,6 +30,8 @@ export default defineComponent({
   },
   computed: {
     operationSymbol(): string {
+      console.log('this.type', this.operationType);
+
       switch (this.operationType) {
         case 'add':
           return '+';

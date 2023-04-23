@@ -3,7 +3,7 @@
     <operation-result
       v-for="(operation, index) in operations"
       :key="index"
-      :operationType="operation.operationType"
+      :operationType="operation.type"
       :number1="operation.number1"
       :number2="operation.number2"
       :result="operation.result"
@@ -22,7 +22,12 @@ export default defineComponent({
   },
   props: {
     operations: {
-      type: Array,
+      type: Array<{
+        type: string;
+        number1: number;
+        number2: number;
+        result: number;
+      }>,
       required: true,
     },
   },

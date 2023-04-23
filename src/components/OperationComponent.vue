@@ -43,16 +43,20 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    const number1 = ref(0);
-    const number2 = ref(0);
+  setup(props, { emit }) {
+    const number1 = ref('');
+    const number2 = ref('');
 
-    function performOperation() {
-      // Emit the 'operation' event with the two input numbers
-      this.$emit('operation', {
+    function performOperation(evt: any) {
+      const operationData = {
+        type: props.operationLabel,
         number1: number1.value,
         number2: number2.value,
-      });
+      };
+
+      console.log('operationData', operationData);
+
+      emit('operation', operationData);
     }
 
     return { number1, number2, performOperation };
