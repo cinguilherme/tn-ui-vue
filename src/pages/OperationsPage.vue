@@ -40,22 +40,30 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { Ref, defineComponent, onMounted, ref } from 'vue';
 import OperationComponent from 'components/OperationComponent.vue';
 import OperationResultsAggregator from 'components/OperationResultsAggregator.vue';
 import { useOperationsStore } from '../stores/operations-store';
+import { fetchOperations } from 'src/services/apiServices';
 
 export default defineComponent({
   name: 'OperationPage',
   methods: {},
+
   setup() {
-    const operations = [
-      { operation: 'add' },
-      { operation: 'subtract' },
-      { operation: 'multiply' },
-      { operation: 'divide' },
-    ];
+    const operations: Ref<Array<{ operation: string }>> = ref([]);
     const operationsStore = useOperationsStore();
+
+    onMounted(async () => {
+      try {
+        const ops = await fetchOperations();
+        operations.value = ops.map((op) => {
+          return { operation: op.type };
+        });
+      } catch (error) {
+        console.log('error', error);
+      }
+    });
 
     console.log(
       'operationsStore on Operations page',
