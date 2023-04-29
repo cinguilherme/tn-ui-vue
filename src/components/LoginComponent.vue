@@ -78,17 +78,32 @@ export default defineComponent({
       loading.value = true;
       bannerMessage.value = '';
 
-      // Simulate a login request
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      loading.value = false;
+      try {
+        const response = await fetch('http://localhost:3000/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username.value,
+            password: password.value,
+          }),
+        });
 
-      // Replace the following line with a check for successful login
-      const loginSuccessful = username.value && password.value;
+        loading.value = false;
 
-      if (loginSuccessful) {
-        router.push({ name: 'Operations' });
-      } else {
-        bannerMessage.value = 'Invalid username or password';
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('token', data.token);
+          router.push({ name: 'Operations' });
+        } else {
+          bannerMessage.value = 'Invalid username or password';
+          bannerType.value = 'negative';
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        loading.value = false;
+        bannerMessage.value = 'An error occurred. Please try again';
         bannerType.value = 'negative';
       }
     }
