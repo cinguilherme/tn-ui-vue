@@ -59,63 +59,55 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'LoginComponent',
-  setup() {
-    const username = ref('');
-    const password = ref('');
-    const loading = ref(false);
-    const bannerMessage = ref('');
-    const bannerType = ref('');
-    const router = useRouter();
+  props: {
+    onAuth: {
+      type: Function,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      username: '',
+      password: '',
+      errorMessage: '',
+      bannerType: 'negative',
+      loading: false,
+    };
+  },
+  methods: {
+    async submitForm() {
+      try {
+        this.loading = true;
+        const result = await this.onAuth(this.username, this.password);
+        this.loading = false;
 
+        if (result.success) {
+          this.errorMessage = '';
+          this.bannerType = 'positive';
+          this.$emit('login-result', true);
+        }
+      } catch (e) {
+        console.log(e);
+        this.bannerType = 'negative';
+        this.errorMessage = 'Invalid username or password';
+        this.$emit('login-result', false);
+      } finally {
+        this.loading = false;
+        this.bannerMessage = 'Invalid username or password';
+      }
+    },
+  },
+  setup() {
+    const bannerMessage = ref('');
     const required = (val: string | null) =>
       (val && val.length > 0) || 'Field is required';
 
-    async function submitForm() {
-      loading.value = true;
-      bannerMessage.value = '';
-
-      try {
-        const response = await fetch('http://localhost:3000/users/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: username.value,
-            password: password.value,
-          }),
-        });
-
-        loading.value = false;
-
-        if (response.ok) {
-          const data = await response.json();
-          localStorage.setItem('token', data.token);
-          router.push({ name: 'Operations' });
-        } else {
-          bannerMessage.value = 'Invalid username or password';
-          bannerType.value = 'negative';
-        }
-      } catch (error) {
-        console.error('Error during login:', error);
-        loading.value = false;
-        bannerMessage.value = 'An error occurred. Please try again';
-        bannerType.value = 'negative';
-      }
-    }
-
     return {
-      username,
-      password,
-      loading,
       bannerMessage,
-      bannerType,
       required,
-      submitForm,
     };
   },
 });
