@@ -1,6 +1,6 @@
 <template>
   <q-page class="row justify-center items-center full-height">
-    <div>
+    <div class="operation-page">
       <h1>Math Operations</h1>
 
       <operation-component
@@ -8,6 +8,7 @@
         :key="index"
         :operationLabel="operation.operation"
         @operation="handleOperation($event)"
+        class="operation-component"
       />
 
       <div class="operation-results-wrapper">
@@ -20,9 +21,17 @@
 </template>
 
 <style scoped>
+.operations-page {
+  background-color: bg-color;
+}
+
 .operations-container {
   display: inline-grid;
   gap: 1rem;
+}
+
+.operation-component {
+  margin-bottom: 1rem;
 }
 
 .operation-results-wrapper {
