@@ -14,6 +14,7 @@ export async function authenticate(username, password) {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem('token', data.token);
+      localStorage.setItem('userId', data.userId);
       return { success: true };
     } else {
       return { success: false, error: 'Invalid username or password' };

@@ -1,7 +1,6 @@
 <template>
   <div class="operation-result">
-    {{ operationType }}: {{ number1 }} {{ operationSymbol }} {{ number2 }} =
-    {{ result }}
+    {{ operationType }}: {{ operationSymbol }} result => {{ result }}
   </div>
 </template>
 
@@ -15,14 +14,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    number1: {
-      type: Number,
-      required: true,
-    },
-    number2: {
-      type: Number,
-      required: true,
-    },
     result: {
       type: Number,
       required: true,
@@ -30,17 +21,19 @@ export default defineComponent({
   },
   computed: {
     operationSymbol(): string {
-      console.log('this.type', this.operationType);
-
       switch (this.operationType) {
-        case 'add':
+        case 'addition':
           return '+';
-        case 'subtract':
+        case 'subtraction':
           return '-';
-        case 'multiply':
+        case 'multiplication':
           return '×';
-        case 'divide':
+        case 'division':
           return '÷';
+        case 'square_root':
+          return '√';
+        case 'random_string':
+          return '🎲';
         default:
           return '';
       }

@@ -14,7 +14,7 @@
       <div class="operation-results-wrapper">
         <div class="operation-results-label">Operation Log:</div>
 
-        <operation-results-aggregator :operations="logs" />
+        <operation-results-aggregator :records="records" />
       </div>
     </div>
   </q-page>
@@ -53,7 +53,11 @@ import { Ref, defineComponent, onMounted, ref } from 'vue';
 import OperationComponent from 'components/OperationComponent.vue';
 import OperationResultsAggregator from 'components/OperationResultsAggregator.vue';
 import { useOperationsStore } from '../stores/operations-store';
-import { fetchOperations } from 'src/services/apiServices';
+import {
+  fetchOperationById,
+  fetchOperations,
+  fetchRecords,
+} from 'src/services/apiServices';
 
 export default defineComponent({
   name: 'OperationPage',
@@ -61,6 +65,7 @@ export default defineComponent({
 
   setup() {
     const operations: Ref<Array<{ operation: string }>> = ref([]);
+    const records: Ref<Array<any>> = ref([]);
     const operationsStore = useOperationsStore();
 
     onMounted(async () => {
@@ -69,6 +74,22 @@ export default defineComponent({
         operations.value = ops.map((op) => {
           return { operation: op.type };
         });
+
+        const recs = await fetchRecords();
+        const opsx = (
+          await Promise.all(
+            recs.map((r) => r.operation_id).map((id) => fetchOperationById(id))
+          )
+        ).filter((o) => o);
+
+        const atualRecs = recs.map((r) => {
+          const op = opsx.find((o) => o?.id === r.operation_id);
+          const rr = { ...r, type: op?.type };
+          return rr;
+        });
+        console.log('recs', atualRecs);
+
+        records.value = atualRecs;
       } catch (error) {
         console.log('error', error);
       }
@@ -86,6 +107,9 @@ export default defineComponent({
     }) => {
       console.log('operationData on Operations page', operation);
 
+      // send the POST request to API to create the record of the operation
+      // the respose successful is a sign we can go ahead and refetch the records
+
       operationsStore.addOperation({
         ...operation,
         result: 0,
@@ -93,12 +117,11 @@ export default defineComponent({
       });
     };
 
-    const logs = operationsStore.$state.operationsLog;
     return {
       operations,
+      records,
       handleOperation,
       operationsStore,
-      logs,
     };
   },
   components: {

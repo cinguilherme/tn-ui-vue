@@ -1,12 +1,10 @@
 <template>
   <div class="operation-results-aggregator">
     <operation-result
-      v-for="(operation, index) in operations"
+      v-for="(operation, index) in records"
       :key="index"
       :operationType="operation.type"
-      :number1="operation.number1"
-      :number2="operation.number2"
-      :result="operation.result"
+      :result="operation.response"
     />
   </div>
 </template>
@@ -21,15 +19,17 @@ export default defineComponent({
     OperationResult,
   },
   props: {
-    operations: {
+    records: {
       type: Array<{
         type: string;
-        number1: number;
-        number2: number;
-        result: number;
+        operation_id: string;
+        response: number;
       }>,
       required: true,
     },
+  },
+  setup() {
+    return {};
   },
 });
 </script>
