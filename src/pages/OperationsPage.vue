@@ -58,6 +58,7 @@ import {
   fetchOperations,
   fetchRecords,
 } from 'src/services/apiServices';
+import { createRecord } from 'src/services/apiServices';
 
 export default defineComponent({
   name: 'OperationPage',
@@ -100,7 +101,7 @@ export default defineComponent({
       operationsStore.$state.operationsLog
     );
 
-    const handleOperation = (operation: {
+    const handleOperation = async (operation: {
       type: string;
       number1: number;
       number2: number;
@@ -109,6 +110,12 @@ export default defineComponent({
 
       // send the POST request to API to create the record of the operation
       // the respose successful is a sign we can go ahead and refetch the records
+
+      const res = await createRecord({
+        operation_id: operation.type,
+        number1: operation.number1,
+        number2: operation.number2,
+      });
 
       operationsStore.addOperation({
         ...operation,

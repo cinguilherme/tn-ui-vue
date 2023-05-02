@@ -16,6 +16,12 @@ export interface Record {
   user_id: string;
 }
 
+export interface NewRecord {
+  operation_id: string;
+  number1?: number;
+  number2?: number;
+}
+
 // fetch operations
 export async function fetchOperations(): Promise<Operation[]> {
   const response = await fetch('http://localhost:3000/v1/operations', {
@@ -81,8 +87,8 @@ export async function fetchRecords(): Promise<Record[]> {
 }
 
 // post request to create new record
-export async function createRecord(record: Record): Promise<Record> {
-  const response = await fetch('http://localhost:3000/v1/records', {
+export async function createRecord(record: NewRecord): Promise<Record> {
+  const response = await fetch('http://localhost:3000/v1/records/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
