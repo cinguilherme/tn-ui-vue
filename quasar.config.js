@@ -12,7 +12,9 @@ const { configure } = require('quasar/wrappers');
 const DotEnv = require('dotenv');
 
 module.exports = configure(function (ctx) {
-  DotEnv.config({ path: '.env.production' });
+  console.log('ctx', ctx);
+  const env = ctx.dev ? '.env.development' : '.env.production';
+  DotEnv.config({ path: env });
 
   return {
     eslint: {
