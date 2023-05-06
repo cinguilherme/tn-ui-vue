@@ -9,8 +9,16 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 const { configure } = require('quasar/wrappers');
+const DotEnv = require('dotenv');
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
+  const envPath = ctx.dev
+    ? '.env.dev'
+    : ctx.prod
+    ? '.env.production'
+    : '.env.testing';
+  DotEnv.config({ path: envPath });
+
   return {
     eslint: {
       // fix: true,

@@ -1,6 +1,8 @@
+const baseUrl = process.env.TN_BASE_URL || 'http://localhost:3000';
+
 export async function authenticate(username, password) {
   try {
-    const response = await fetch('http://localhost:3000/v1/users/login', {
+    const response = await fetch(baseUrl + '/v1/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
