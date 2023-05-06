@@ -1,4 +1,4 @@
-const baseUrl = process.env.TN_BASE_URL || 'http://localhost:3000';
+const baseUrl = process.env.TN_API_URL || 'http://localhost:3000';
 
 export async function authenticate(username, password) {
   try {
