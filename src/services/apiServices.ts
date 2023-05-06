@@ -22,9 +22,11 @@ export interface NewRecord {
   number2?: number;
 }
 
+const apiBaseUrl = process.env.TN_API_URL || 'http://localhost:3000';
+
 // fetch operations
 export async function fetchOperations(): Promise<Operation[]> {
-  const response = await fetch('http://localhost:3000/v1/operations', {
+  const response = await fetch(apiBaseUrl + '/v1/operations', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -44,7 +46,7 @@ export async function fetchOperations(): Promise<Operation[]> {
 export async function fetchOperationById(
   id: string
 ): Promise<Operation | undefined> {
-  const response = await fetch(`http://localhost:3000/v1/operations/${id}`, {
+  const response = await fetch(`${apiBaseUrl}/v1/operations/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -68,7 +70,7 @@ export async function fetchOperationById(
 // fetch records
 export async function fetchRecords(): Promise<Record[]> {
   const response = await fetch(
-    `http://localhost:3000/v1/records/user/${localStorage.getItem('userId')}`,
+    `${apiBaseUrl}/v1/records/user/${localStorage.getItem('userId')}`,
     {
       method: 'GET',
       headers: {
@@ -88,7 +90,7 @@ export async function fetchRecords(): Promise<Record[]> {
 
 // post request to create new record
 export async function createRecord(record: NewRecord): Promise<Record> {
-  const response = await fetch('http://localhost:3000/v1/records/', {
+  const response = await fetch(`${apiBaseUrl}/v1/records/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
