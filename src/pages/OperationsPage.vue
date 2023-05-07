@@ -7,6 +7,7 @@
         v-for="(operation, index) in operations"
         :key="index"
         :operationLabel="operation.operation"
+        :id="operation.id"
         @operation="handleOperation($event)"
         class="operation-component"
       />
@@ -65,7 +66,7 @@ export default defineComponent({
   methods: {},
 
   setup() {
-    const operations: Ref<Array<{ operation: string }>> = ref([]);
+    const operations: Ref<Array<{ operation: string; id: string }>> = ref([]);
     const records: Ref<Array<any>> = ref([]);
     const operationsStore = useOperationsStore();
 
@@ -73,7 +74,7 @@ export default defineComponent({
       try {
         const ops = await fetchOperations();
         operations.value = ops.map((op) => {
-          return { operation: op.type };
+          return { operation: op.type, id: op.id };
         });
 
         const recs = await fetchRecords();
@@ -102,6 +103,7 @@ export default defineComponent({
     );
 
     const handleOperation = async (operation: {
+      id: string;
       type: string;
       number1: number;
       number2: number;
@@ -112,9 +114,9 @@ export default defineComponent({
       // the respose successful is a sign we can go ahead and refetch the records
 
       const res = await createRecord({
-        operation_id: operation.type,
-        number1: operation.number1,
-        number2: operation.number2,
+        operation_id: operation.id,
+        input1: operation.number1,
+        input2: operation.number2,
       });
 
       operationsStore.addOperation({

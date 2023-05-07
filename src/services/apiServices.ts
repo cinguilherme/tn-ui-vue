@@ -18,8 +18,8 @@ export interface Record {
 
 export interface NewRecord {
   operation_id: string;
-  number1?: number;
-  number2?: number;
+  input1?: number;
+  input2?: number;
 }
 
 const apiBaseUrl = process.env.TN_API_URL || 'http://localhost:3000';
@@ -69,22 +69,25 @@ export async function fetchOperationById(
 
 // fetch records
 export async function fetchRecords(): Promise<Record[]> {
-  const response = await fetch(
-    `${apiBaseUrl}/v1/records/user/${localStorage.getItem('userId')}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    }
-  );
+  const userId = await localStorage.getItem('userId');
+  console.log('fetch records for user id', userId);
+  const response = await fetch(`${apiBaseUrl}/v1/records/user/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
 
   if (!response.ok) {
     throw new Error(`Error fetching records: ${response.statusText}`);
   }
 
-  const records = await response.json();
+  const res = await response.json();
+
+  console.log('response get records by user id', res);
+
+  const records = res;
   return records;
 }
 

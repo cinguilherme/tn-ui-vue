@@ -69,6 +69,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    id: {
+      type: String,
+      required: true,
+    },
   },
   setup(props, { emit }) {
     const number1 = ref('');
@@ -87,6 +91,7 @@ export default defineComponent({
 
     function performOperation(evt: any) {
       const operationData = {
+        id: props.id,
         type: props.operationLabel,
         number1: number1.value,
         number2: number2.value,
