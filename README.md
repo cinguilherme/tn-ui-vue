@@ -36,8 +36,8 @@ These instructions will get you a copy of the project up and running on your loc
 Ensure you have the following installed on your local development machine:
 
 - [Node.js](https://nodejs.org/) v12.x.x or higher
-- [NPM](https://www.npmjs.com/) v6.x.x or higher (comes with Node.js)
-- [Quasar CLI](https://quasar.dev/quasar-cli/installation) v1.x.x or higher
+- [YARN](https://yarnpkg.com)
+- [Quasar CLI](https://quasar.dev/quasar-cli/installation) v1.2.x or higher
 
 ### Installation
 
@@ -49,14 +49,9 @@ Ensure you have the following installed on your local development machine:
 
 2. Navigate to the project directory:
 
-   ```
-   cd vue-quasar-math-operations
-   ```
-
 3. Install project dependencies:
 
    ```
-   npm install
    yarn install
    ```
 
@@ -66,14 +61,19 @@ Ensure you have the following installed on your local development machine:
    quasar dev
    ```
 
-The application should now be running on [http://localhost:8080](http://localhost:8080).
+The application should now be running on [http://localhost:9000](http://localhost:9000).
 
 ## Usage
 
-1. Access the login page at [http://localhost:8080](http://localhost:8080) and log in using any credentials (authentication is not implemented in this demo).
+1. Access the login page at [http://localhost:9000](http://localhost:9000) and log in using any credentials (authentication is not implemented in this demo).
 
 2. After logging in, you will be redirected to the operations page where you can perform addition, subtraction, multiplication, and division.
+   Refer to the API, create the user using the post endpoint and use the same credentials to login.
 
 3. To perform an operation, enter the numbers in the input fields and click on the respective operation button.
 
 4. The result will be displayed in the "Result" section.
+
+### Live Demo
+
+- [Demo](http://tn-vue-app.s3-website-us-east-1.amazonaws.com/)
