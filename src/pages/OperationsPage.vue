@@ -67,7 +67,7 @@ import OperationResultsAggregator from 'components/OperationResultsAggregator.vu
 import LoggedUser from 'components/LoggedUser.vue';
 import {useOperationsStore} from 'stores/operations-store';
 import {useUserStore} from 'stores/user-store';
-import {createRecord, fetchOperationById, fetchOperations, fetchRecords,} from 'src/services/apiServices';
+import {createRecord, fetchOperations, fetchRecords, Record} from 'src/services/apiServices';
 
 export default defineComponent({
   name: 'OperationPage',
@@ -80,7 +80,7 @@ export default defineComponent({
 
   setup() {
     const operations: Ref<Array<{ operation: string; id: string }>> = ref([]);
-    const records: Ref<Array<any>> = ref([]);
+    const records: Ref<Array<Record>> = ref([]);
     const operationsStore = useOperationsStore();
     const userStore = useUserStore();
 
@@ -91,21 +91,8 @@ export default defineComponent({
           return {operation: op.type, id: op.id};
         });
 
-        const recs = await fetchRecords();
-        const opsx = (
-          await Promise.all(
-            recs.map((r) => r.operation_id).map((id) => fetchOperationById(id))
-          )
-        ).filter((o) => o);
+        records.value = await fetchRecords();
 
-        const atualRecs = recs.map((r) => {
-          const op = opsx.find((o) => o?.id === r.operation_id);
-          const rr = {...r, type: op?.type};
-          return rr;
-        });
-        console.log('recs', atualRecs);
-
-        records.value = atualRecs;
       } catch (error) {
         console.log('error', error);
       }

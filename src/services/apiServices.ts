@@ -11,6 +11,8 @@ export interface Record {
   date: string;
   id: string;
   operation_id: string;
+  operation_desc: string;
+  operation_inputs: any[];
   operation_response: string;
   user_balance: number;
   user_id: string;
@@ -87,8 +89,7 @@ export async function fetchRecords(): Promise<Record[]> {
 
   console.log('response get records by user id', res);
 
-  const records = res;
-  return records;
+  return res;
 }
 
 // post request to create new record

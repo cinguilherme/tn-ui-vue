@@ -1,10 +1,9 @@
 <template>
   <div class="operation-results-aggregator">
     <operation-result
-      v-for="(operation, index) in records"
+      v-for="(record, index) in records"
       :key="index"
-      :operationType="operation.type"
-      :result="operation.response"
+      :record="record"
     />
   </div>
 </template>
@@ -12,6 +11,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import OperationResult from './OperationResult.vue';
+import { Record } from '../services/apiServices';
 
 export default defineComponent({
   name: 'OperationResultsAggregator',
@@ -20,11 +20,7 @@ export default defineComponent({
   },
   props: {
     records: {
-      type: Array<{
-        type: string;
-        operation_id: string;
-        response: number;
-      }>,
+      type: Array<Record>,
       required: true,
     },
   },
