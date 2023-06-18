@@ -15,16 +15,20 @@ import {useUserStore} from 'stores/user-store';
 
 export default defineComponent({
   name: 'LoggedUser',
+  props: {
+    cumulated: Number,
+  },
   data() {
     return {
-      userStore: null,
-      user: {}
+      userStore: useUserStore(),
+      user: useUserStore().getUser(),
     };
   },
   mounted() {
     this.userStore = useUserStore();
     this.user = this.userStore.getUser();
   },
+
   methods: {
     async logout() {
       try {

@@ -5,7 +5,8 @@ export const useUserStore = defineStore({
   state: () => ({
     name: 'John Doe',
     credit: 1000,
-    status: 'Active'
+    status: 'Active',
+    cumulated: 0,
   }),
   actions: {
     async logout() {
@@ -18,11 +19,15 @@ export const useUserStore = defineStore({
       this.credit = user.credit;
       this.status = user.status;
     },
+    setCumulated(balance: number) {
+      this.cumulated = balance;
+    },
     getUser() {
       return {
         name: this.name,
         credit: this.credit,
-        status: this.status
+        status: this.status,
+        cumulated: this.cumulated,
       }
     }
   }

@@ -71,6 +71,7 @@ import {createRecord, fetchOperations, fetchRecords, Record} from 'src/services/
 
 export default defineComponent({
   name: 'OperationPage',
+
   methods: {
     handleLogout() {
       console.log('logout handle go to login')
@@ -83,6 +84,7 @@ export default defineComponent({
     const records: Ref<Array<Record>> = ref([]);
     const operationsStore = useOperationsStore();
     const userStore = useUserStore();
+    const cumulated = ref(0);
 
     onMounted(async () => {
       try {
@@ -91,7 +93,10 @@ export default defineComponent({
           return {operation: op.type, id: op.id};
         });
 
-        records.value = await fetchRecords();
+        const recs = await fetchRecords();
+        records.value = recs;
+
+        cumulated.value = recs.map(r => r.amount).reduce((a, b) => a + b, 0);
 
       } catch (error) {
         console.log('error', error);
@@ -109,6 +114,7 @@ export default defineComponent({
       number1: number;
       number2: number;
     }) => {
+      const cumulated = ref(0);
       console.log('operationData on Operations page', operation);
 
       // send the POST request to API to create the record of the operation
@@ -120,6 +126,11 @@ export default defineComponent({
         input2: operation.number2,
       });
 
+      const recs = await fetchRecords();
+      records.value = recs;
+
+      cumulated.value = recs.map(r => r.amount).reduce((a, b) => a + b, 0);
+
       operationsStore.addOperation({
         ...operation,
         result: 0,
@@ -128,6 +139,7 @@ export default defineComponent({
     };
 
     return {
+      cumulated,
       operations,
       records,
       handleOperation,
