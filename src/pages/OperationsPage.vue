@@ -1,7 +1,18 @@
 <template>
   <q-page class="row justify-center items-center full-height">
     <div class="operation-page">
-      <h1>Math Operations</h1>
+
+      <q-toolbar>
+        <div class="col">
+          <h1>Math Operations</h1>
+        </div>
+        <div class="col-auto" style="margin: 10px; padding: 10px;">
+          <logged-user
+          @logout-result="handleLogout"/>
+        </div>
+
+
+      </q-toolbar>
 
       <operation-component
         v-for="(operation, index) in operations"
@@ -15,7 +26,7 @@
       <div class="operation-results-wrapper">
         <div class="operation-results-label">Operation Log:</div>
 
-        <operation-results-aggregator :records="records" />
+        <operation-results-aggregator :records="records"/>
       </div>
     </div>
   </q-page>
@@ -50,31 +61,34 @@
 </style>
 
 <script lang="ts">
-import { Ref, defineComponent, onMounted, ref } from 'vue';
+import {defineComponent, onMounted, Ref, ref} from 'vue';
 import OperationComponent from 'components/OperationComponent.vue';
 import OperationResultsAggregator from 'components/OperationResultsAggregator.vue';
-import { useOperationsStore } from '../stores/operations-store';
-import {
-  fetchOperationById,
-  fetchOperations,
-  fetchRecords,
-} from 'src/services/apiServices';
-import { createRecord } from 'src/services/apiServices';
+import LoggedUser from 'components/LoggedUser.vue';
+import {useOperationsStore} from 'stores/operations-store';
+import {useUserStore} from 'stores/user-store';
+import {createRecord, fetchOperationById, fetchOperations, fetchRecords,} from 'src/services/apiServices';
 
 export default defineComponent({
   name: 'OperationPage',
-  methods: {},
+  methods: {
+    handleLogout() {
+      console.log('logout handle go to login')
+      this.$router.push({name: 'Login'});
+    },
+  },
 
   setup() {
     const operations: Ref<Array<{ operation: string; id: string }>> = ref([]);
     const records: Ref<Array<any>> = ref([]);
     const operationsStore = useOperationsStore();
+    const userStore = useUserStore();
 
     onMounted(async () => {
       try {
         const ops = await fetchOperations();
         operations.value = ops.map((op) => {
-          return { operation: op.type, id: op.id };
+          return {operation: op.type, id: op.id};
         });
 
         const recs = await fetchRecords();
@@ -86,7 +100,7 @@ export default defineComponent({
 
         const atualRecs = recs.map((r) => {
           const op = opsx.find((o) => o?.id === r.operation_id);
-          const rr = { ...r, type: op?.type };
+          const rr = {...r, type: op?.type};
           return rr;
         });
         console.log('recs', atualRecs);
@@ -131,11 +145,13 @@ export default defineComponent({
       records,
       handleOperation,
       operationsStore,
+      userStore,
     };
   },
   components: {
     OperationComponent,
     OperationResultsAggregator,
+    LoggedUser,
   },
 });
 </script>

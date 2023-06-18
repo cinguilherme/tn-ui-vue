@@ -2,6 +2,7 @@ import { store } from 'quasar/wrappers';
 import { createPinia } from 'pinia';
 import { Router } from 'vue-router';
 import { useOperationsStore } from './operations-store';
+import {useUserStore} from 'stores/user-store';
 
 /*
  * When adding new properties to stores, you should also
@@ -31,6 +32,7 @@ export default store((/* { ssrContext } */) => {
 
   // Add the operations store
   const operationsStore = useOperationsStore(pinia);
+  const userStore = useUserStore(pinia);
 
   return pinia;
 });
