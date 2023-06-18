@@ -75,8 +75,8 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const number1 = ref('');
-    const number2 = ref('');
+    const number1 = ref(0);
+    const number2 = ref(0);
 
     function shouldShowNumber1Input(): boolean {
       return (
