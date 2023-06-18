@@ -8,9 +8,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import {defineComponent} from 'vue';
 import LoginComponent from '../components/LoginComponent.vue';
-import { authenticate } from '../auth.js';
+import {authenticate} from '../auth.js';
+import {useUserStore} from 'stores/user-store';
 
 export default defineComponent({
   name: 'LoginPage',
@@ -26,9 +27,10 @@ export default defineComponent({
   },
   methods: {
     authenticate,
-    handleLoginResult(success: any) {
-      if (success) {
-        this.$router.push({ name: 'Operations' });
+    handleLoginResult(data: { success: boolean, user: { username: string, credit: number, status: string }}) {
+      if (data.success) {
+        useUserStore().setUser(data.user);
+        this.$router.push({name: 'Operations'});
       }
     },
   },

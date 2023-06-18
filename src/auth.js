@@ -17,7 +17,18 @@ export async function authenticate(username, password) {
       const data = await response.json();
       localStorage.setItem('token', data.token);
       localStorage.setItem('userId', data.userId);
-      return { success: true };
+
+      const user = await fetch(baseUrl + '/v1/users/' + data.userId, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + data.token,
+        }
+      });
+
+      const userData = await user.json();
+      console.log(userData);
+      return { success: true, user: userData };
     } else {
       return { success: false, error: 'Invalid username or password' };
     }

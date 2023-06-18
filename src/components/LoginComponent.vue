@@ -58,7 +58,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import {defineComponent, ref} from 'vue';
 
 export default defineComponent({
   name: 'LoginComponent',
@@ -81,13 +81,13 @@ export default defineComponent({
     async submitForm() {
       try {
         this.loading = true;
-        const result = await this.onAuth(this.username, this.password);
+        const result: { success: boolean, user: unknown } = await this.onAuth(this.username, this.password);
         this.loading = false;
 
         if (result.success) {
           this.errorMessage = '';
           this.bannerType = 'positive';
-          this.$emit('login-result', true);
+          this.$emit('login-result', result);
         }
       } catch (e) {
         console.log(e);

@@ -1,7 +1,7 @@
 <template>
   <div class="user-info">
     <div class="user-details">
-      <h2>{{ user.name }}</h2>
+      <p>{{ user.name }}</p>
       <p>Credits: {{ user.credit }}</p>
       <p>Status: {{ user.status }}</p>
     </div>

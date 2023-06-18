@@ -13,6 +13,11 @@ export const useUserStore = defineStore({
       localStorage.removeItem('userId');
       return Promise.resolve(true);
     },
+    setUser(user: { username: string; credit: number; status: string }) {
+      this.name = user.username;
+      this.credit = user.credit;
+      this.status = user.status;
+    },
     getUser() {
       return {
         name: this.name,
